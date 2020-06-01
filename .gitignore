@@ -1,0 +1,12 @@
+dev-requirements.txt
+requirements.txt
+pymakr.conf
+micropy.json
+__pycache__
+.vscode
+.git
+project.pymakr
+env
+venv
+.python-version
+.micropy
