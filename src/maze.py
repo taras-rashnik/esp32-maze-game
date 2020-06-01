@@ -48,7 +48,7 @@ class VerticalWall(Wall):
 
 
 class Ball:
-    color = 0xffff00
+    color = 0x0000ff
 
     def __init__(self, location, velocity, radius):
         self.location = location
@@ -57,6 +57,10 @@ class Ball:
 
     def __repr__(self):
         return "Ball(location={:.2f}, velocity={:.2f}, radius={:.2f}), color={}".format(self.location, self.velocity, self.radius, self.color)
+
+    @property
+    def bounding_rect(self):
+        return (self.location.x - self.radius/2, self.location.y - self.radius/2, self.radius, self.radius)
 
 
 class Maze:

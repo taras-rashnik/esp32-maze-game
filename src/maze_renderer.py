@@ -29,25 +29,32 @@ class MazeRenderer:
             h=240,
             r=8)
 
+        power = Pin(m5stack.TFT_LED_PIN, Pin.OUT)
+        power.value(1)
+
         return display
 
+    def _draw_rect(self, rect, color):
+        x, y, w, h = rect
+        self.display.fill_rectangle(
+            int(self.hscale * x),
+            int(self.vscale * y),
+            int(self.hscale * w),
+            int(self.vscale * h),
+            color)
+
     def _draw_walls(self, walls):
-        color = Wall.color
         for w in walls:
-            x, y, w, h = w.bounding_rect
-            self.display.fill_rectangle(
-                int(self.hscale * x), 
-                int(self.vscale * y), 
-                int(self.hscale * w), 
-                int(self.vscale * h), 
-                color)
+            self._draw_rect(w.bounding_rect, Wall.color)
 
     def draw_maze(self):
+        self.display.fill_rectangle(0, 0, self.display.width, self.display.height, Maze.background_color)
         self._draw_walls(self.maze.horizontalWalls)
         self._draw_walls(self.maze.verticalWalls)
+        self.draw_ball()
 
     def draw_ball(self):
-        pass
+        self._draw_rect(self.maze.ball.bounding_rect, Ball.color)
 
     def erase_ball(self):
-        pass
+        self._draw_rect(self.maze.ball.bounding_rect, Maze.background_color)
