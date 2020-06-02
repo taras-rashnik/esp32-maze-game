@@ -30,14 +30,12 @@ renderer = MazeRenderer(maze)
 renderer.draw_maze()
 while True:
     x, y, z = sensor.acceleration
-    print(x, y)
+    # print(x, y)
 
-    utime.sleep_ms(100)
-    # display.fill_rectangle(int(hscale * maze.ball.location.x - 5), int(vscale * maze.ball.location.y - 5), 10, 10, 0xffffff)
+    utime.sleep_ms(40)
     renderer.erase_ball()
     maze.ball.location.x -= 0.01 * x
     maze.ball.location.y += 0.01 * y
     renderer.draw_ball()
-    # display.fill_rectangle(int(hscale * maze.ball.location.x - 5), int(vscale * maze.ball.location.y - 5), 10, 10, color565(0xFF, 0x00, 0xFF))
 
 print('Maze game finished')
