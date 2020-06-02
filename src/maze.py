@@ -71,3 +71,42 @@ class Maze:
         self.verticalWalls = verticalWalls
         self.ball = ball
 
+
+def vcollide(vwall, ball):
+    if ball.location.y >= vwall.start.y and ball.location.y <= (vwall.start.y + vwall.length):
+        # horizontal distance betweem centers of ball and vwall
+        dist = ball.location.x - vwall.start.x
+        # minimum distance betweem centers of ball and vwall
+        delta = ball.radius + vwall.width/2
+        # ball to the left from vwall and collide
+        if dist < 0 and dist > -delta:
+            # change velocity to opposite direction
+            ball.velocity.x *= -1
+            # bounce back to not overlap
+            ball.location.x = vwall.start.x - delta
+        # ball to the right from vwall and collide
+        elif dist >= 0 and dist < delta:
+            # change velocity to opposite direction
+            ball.velocity.x *= -1
+            # bounce back to not overlap
+            ball.location.x = vwall.start.x + delta
+
+
+def hcollide(hwall, ball):
+    if ball.location.x >= hwall.start.x and ball.location.x <= (hwall.start.x + hwall.length):
+        # vertical distance betweem centers of ball and hwall
+        dist = ball.location.y - hwall.start.y
+        # minimum distance betweem centers of ball and hwall
+        delta = ball.radius + hwall.width/2
+        # ball to the left from vwall and collide
+        if dist < 0 and dist > -delta:
+            # change velocity to opposite direction
+            ball.velocity.y *= -1
+            # bounce back to not overlap
+            ball.location.y = hwall.start.y - delta
+        # ball to the right from vwall and collide
+        elif dist >= 0 and dist < delta:
+            # change velocity to opposite direction
+            ball.velocity.y *= -1
+            # bounce back to not overlap
+            ball.location.y = hwall.start.y + delta

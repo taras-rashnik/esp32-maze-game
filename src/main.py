@@ -26,16 +26,34 @@ i2c = I2C(scl=Pin(22), sda=Pin(21))
 sensor = MPU6886(i2c)
 
 renderer = MazeRenderer(maze)
-
 renderer.draw_maze()
+
+start = utime.ticks_ms()
+
 while True:
-    x, y, z = sensor.acceleration
+    accx, accy, _ = sensor.acceleration
     # print(x, y)
 
     utime.sleep_ms(40)
+
     renderer.erase_ball()
-    maze.ball.location.x -= 0.01 * x
-    maze.ball.location.y += 0.01 * y
+
+    end = utime.ticks_ms()
+    elapsed = utime.ticks_diff(end, start)
+    start = end
+
+    maze.ball.velocity.x -= 0.0001 * accx * elapsed
+    maze.ball.velocity.y += 0.0001 * accy * elapsed
+
+    maze.ball.location.x += 0.001 * maze.ball.velocity.x * elapsed
+    maze.ball.location.y += 0.001 * maze.ball.velocity.y * elapsed
+
+    for vwall in maze.verticalWalls:
+        vcollide(vwall, maze.ball)
+
+    for hwall in maze.horizontalWalls:
+        hcollide(hwall, maze.ball)
+
     renderer.draw_ball()
 
 print('Maze game finished')
