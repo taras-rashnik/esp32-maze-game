@@ -31,8 +31,6 @@ start = utime.ticks_ms()
 
 while True:
     acc = sensor.acceleration
-    # print(x, y)
-
     utime.sleep_ms(10)
 
     renderer.erase_ball()

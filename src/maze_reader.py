@@ -99,6 +99,6 @@ def maze_from_string(s):
         vWalls += walls_from_vertical_line(vline, i)
 
     # ball
-    ball = Ball(find_ball_location(lines), Vector(0, 0), 0.2)
+    ball = Ball(find_ball_location(lines), Vector(0, 0), 0.1)
 
     return Maze(hWalls, vWalls, ball)

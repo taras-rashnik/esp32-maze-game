@@ -22,7 +22,7 @@ class Vector(Point):
 
 class Wall:
     color = 0xffff00
-    width = 0.2
+    width = 0.1
 
     def __init__(self, startPoint, length):
         self.start = startPoint
@@ -104,20 +104,40 @@ class Maze:
         return (minx, miny, maxx - minx, maxy - miny)
 
     def accelerate(self, acc, elapsed):
+        shiftx, shifty = self._calculate_ball_shift(elapsed)
+        numx = int((2*abs(shiftx))/Wall.width)
+        numy = int((2*abs(shifty))/Wall.width)
+        num = max(numx, numy)
+        if num <= 1:
+            self._accelerate(acc, elapsed)
+        else:
+            for _ in range(num):
+                self._accelerate(acc, elapsed/num)
+
+    kvel = 0.001
+
+    def _calculate_ball_shift(self, elapsed):
+        return (Maze.kvel * self.ball.velocity.x * elapsed,
+                Maze.kvel * self.ball.velocity.y * elapsed)
+
+    kacc = 0.005
+
+    def _accelerate(self, acc, elapsed):
+        shiftx, shifty = self._calculate_ball_shift(elapsed)
+        self.ball.location.x += shiftx
+        self.ball.location.y += shifty
+
         accx, accy, _ = acc
-        self.ball.velocity.x -= 0.004 * accx * elapsed
-        self.ball.velocity.y += 0.004 * accy * elapsed
+        self.ball.velocity.x -= Maze.kacc * accx * elapsed
+        self.ball.velocity.y += Maze.kacc * accy * elapsed
 
         # rolling resistance force
         abs_velocity = math.sqrt(
             self.ball.velocity.x**2 + self.ball.velocity.y**2)
         velocity_direction_x = self.ball.velocity.x / abs_velocity
         velocity_direction_y = self.ball.velocity.y / abs_velocity
-        self.ball.velocity.x -= 0.0005 * velocity_direction_x * elapsed
-        self.ball.velocity.y -= 0.0005 * velocity_direction_y * elapsed
-
-        self.ball.location.x += 0.001 * self.ball.velocity.x * elapsed
-        self.ball.location.y += 0.001 * self.ball.velocity.y * elapsed
+        self.ball.velocity.x -= 0.001 * velocity_direction_x * elapsed
+        self.ball.velocity.y -= 0.001 * velocity_direction_y * elapsed
 
         for vwall in self.verticalWalls:
             self._vcollide(vwall, self.ball)
@@ -126,7 +146,7 @@ class Maze:
             self._hcollide(hwall, self.ball)
 
 
-    kr = 0.8
+    kr = 0.7
 
     @staticmethod
     def _vcollide(vwall, ball):
