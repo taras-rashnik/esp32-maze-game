@@ -5,6 +5,7 @@ from mpu6886 import MPU6886
 from maze import *
 import maze_reader as reader
 from maze_renderer import MazeRenderer
+import math
 
 
 print('Maze game started')
@@ -42,8 +43,15 @@ while True:
     elapsed = utime.ticks_diff(end, start)
     start = end
 
-    maze.ball.velocity.x -= 0.0001 * accx * elapsed
-    maze.ball.velocity.y += 0.0001 * accy * elapsed
+    maze.ball.velocity.x -= 0.001 * accx * elapsed
+    maze.ball.velocity.y += 0.001 * accy * elapsed
+
+    # rolling resistance force
+    abs_velocity = math.sqrt(maze.ball.velocity.x**2 + maze.ball.velocity.y**2)
+    velocity_direction_x = maze.ball.velocity.x / abs_velocity
+    velocity_direction_y = maze.ball.velocity.y / abs_velocity
+    maze.ball.velocity.x -= 0.0003 * velocity_direction_x * elapsed
+    maze.ball.velocity.y -= 0.0003 * velocity_direction_y * elapsed
 
     maze.ball.location.x += 0.001 * maze.ball.velocity.x * elapsed
     maze.ball.location.y += 0.001 * maze.ball.velocity.y * elapsed
