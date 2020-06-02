@@ -50,9 +50,12 @@ class MazeRenderer:
         for w in walls:
             self._draw_rect(w.bounding_rect, Wall.color)
 
-    def draw_maze(self):
+    def _eraze_screen(self):
         width, height = self.tft.screensize()
         self._draw_rect((0, 0, width, height), Maze.background_color)
+
+    def draw_maze(self):
+        self._eraze_screen()
         self._draw_walls(self.maze.horizontalWalls)
         self._draw_walls(self.maze.verticalWalls)
         self.draw_ball()
@@ -62,3 +65,7 @@ class MazeRenderer:
 
     def erase_ball(self):
         self._draw_rect(self.maze.ball.bounding_rect, Maze.background_color)
+
+    def print_game_over(self):
+        self._eraze_screen()
+        self.tft.text(10, 10, 'Game over')

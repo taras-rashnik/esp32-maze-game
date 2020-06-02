@@ -36,7 +36,7 @@ class HorizontalWall(Wall):
 
     @property
     def bounding_rect(self):
-        return (self.start.x - self.width/2, self.start.y - self.width/2, self.length + self.width, self.width)
+        return (self.start.x, self.start.y - self.width/2, self.length, self.width)
 
 
 class VerticalWall(Wall):
@@ -46,7 +46,7 @@ class VerticalWall(Wall):
 
     @property
     def bounding_rect(self):
-        return (self.start.x - self.width/2, self.start.y - self.width/2, self.width, self.length + self.width)
+        return (self.start.x - self.width/2, self.start.y, self.width, self.length)
 
 
 class Ball:
@@ -72,6 +72,36 @@ class Maze:
         self.horizontalWalls = horizontalWalls
         self.verticalWalls = verticalWalls
         self.ball = ball
+        self.bounding_rect = Maze._calculate_bounding_rect(horizontalWalls, verticalWalls)
+
+    @property
+    def is_ball_out(self):
+        x, y, w, h = self.bounding_rect
+        if self.ball.location.x < x or self.ball.location.x > x + w:
+            return True
+        if self.ball.location.y < y or self.ball.location.y > y + h:
+            return True
+        return False
+
+    @staticmethod
+    def _calculate_bounding_rect(horizontalWalls, verticalWalls):
+        minx = 0
+        maxx = 0
+        miny = 0
+        maxy = 0
+        for vwall in verticalWalls:
+            minx = min(minx, vwall.start.x)
+            maxx = max(maxx, vwall.start.x)
+            miny = min(miny, vwall.start.y)
+            maxy = max(maxy, vwall.start.y + vwall.length)
+
+        for hwall in horizontalWalls:
+            minx = min(minx, hwall.start.x)
+            maxx = max(maxx, hwall.start.x + hwall.length)
+            miny = min(miny, hwall.start.y)
+            maxy = max(maxy, hwall.start.y)
+
+        return (minx, miny, maxx - minx, maxy - miny)
 
     def accelerate(self, acc, elapsed):
         accx, accy, _ = acc
@@ -83,8 +113,8 @@ class Maze:
             self.ball.velocity.x**2 + self.ball.velocity.y**2)
         velocity_direction_x = self.ball.velocity.x / abs_velocity
         velocity_direction_y = self.ball.velocity.y / abs_velocity
-        self.ball.velocity.x -= 0.0003 * velocity_direction_x * elapsed
-        self.ball.velocity.y -= 0.0003 * velocity_direction_y * elapsed
+        self.ball.velocity.x -= 0.0005 * velocity_direction_x * elapsed
+        self.ball.velocity.y -= 0.0005 * velocity_direction_y * elapsed
 
         self.ball.location.x += 0.001 * self.ball.velocity.x * elapsed
         self.ball.location.y += 0.001 * self.ball.velocity.y * elapsed

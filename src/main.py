@@ -44,4 +44,9 @@ while True:
 
     renderer.draw_ball()
 
+    if maze.is_ball_out:
+        renderer.print_game_over()
+        print('Game over')
+        break
+
 print('Maze game finished')

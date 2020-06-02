@@ -12,12 +12,12 @@ def walls_from_horizontal_line(line, idx):
             lenght += 1
         else:
             if lenght > 0:
-                walls.append(HorizontalWall(Point(xstart, ystart), lenght))
+                walls.append(HorizontalWall(Point(xstart-Wall.width/2, ystart), lenght+Wall.width))
             xstart = i+1
             lenght = 0
 
     if lenght > 0:
-        walls.append(HorizontalWall(Point(xstart, ystart), lenght))
+        walls.append(HorizontalWall(Point(xstart-Wall.width/2, ystart), lenght+Wall.width))
 
     return walls
 
@@ -33,12 +33,12 @@ def walls_from_vertical_line(line, idx):
             lenght += 1
         else:
             if lenght > 0:
-                walls.append(VerticalWall(Point(xstart, ystart), lenght))
+                walls.append(VerticalWall(Point(xstart, ystart-Wall.width/2), lenght+Wall.width))
             ystart = i+1
             lenght = 0
 
     if lenght > 0:
-        walls.append(VerticalWall(Point(xstart, ystart), lenght))
+        walls.append(VerticalWall(Point(xstart, ystart-Wall.width/2), lenght+Wall.width))
 
     return walls
 
