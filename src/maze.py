@@ -136,8 +136,8 @@ class Maze:
             self.ball.velocity.x**2 + self.ball.velocity.y**2)
         velocity_direction_x = self.ball.velocity.x / abs_velocity
         velocity_direction_y = self.ball.velocity.y / abs_velocity
-        self.ball.velocity.x -= 0.001 * velocity_direction_x * elapsed
-        self.ball.velocity.y -= 0.001 * velocity_direction_y * elapsed
+        self.ball.velocity.x -= 0.003 * velocity_direction_x * elapsed
+        self.ball.velocity.y -= 0.003 * velocity_direction_y * elapsed
 
         for vwall in self.verticalWalls:
             self._vcollide(vwall, self.ball)
